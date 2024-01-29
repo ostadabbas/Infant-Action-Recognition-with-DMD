@@ -7,16 +7,6 @@ Preprocessed  infant 2D and 3D skeleton data can be downloaded
 
 
 ## Environment
-<a name="environment"></a>
-The code was developed using Python 3.7 on Ubuntu 18.04.
-
-Please install dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
-
-
-## Instructions
 
 Prepare the virtual environment:
 
@@ -32,6 +22,21 @@ mim install mmpose  # optional
 git clone https://github.com/open-mmlab/mmaction2.git
 cd mmaction2
 pip install -v -e .
+```
+### Data preparation
+
+Add the infact dataset to:
+
+\Data\InfAct_plus\2d\primitive
+
+Put downloaded data into the following directory structure:
+
+```
+- Data/
+  - InfAct_plus/
+    - 2d/
+      -primitive/
+        -InfAct_plus.pkl
 ```
 
 ### Training
