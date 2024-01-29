@@ -43,17 +43,16 @@ Put downloaded data into the following directory structure:
 To train the model on InfAct
 
 ```
-"""mim train mmaction configs/ctrgcn_infact_plus_2d_primitive.py 
---work-dir ../../../Results/ctrgcn_infact_plus_2d_primitive"""
+mim train mmaction configs/ctrgcn_infact_plus_2d_primitive.py 
+--work-dir ../../../Results/ctrgcn_infact_plus_2d_primitive
 ```
 
 ### Inference
 
 
 ```
-mim test mmaction 
-configs/ctrgcn_infact_plus_2d_primitive.py 
---checkpoint ../../../Results/ctrgcn_infact_plus_2d_primitive/best_acc_top1_epoch_{}.pth 
+mim test mmaction configs/ctrgcn_infact_plus_2d_primitive.py 
+--checkpoint <BEST_PERFORMING_CHECKPOINT> 
 --dump ../../../Results/ctrgcn_infact_plus_2d_primitive/eval.pkl
 ```
 
