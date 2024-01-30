@@ -42,6 +42,21 @@ Put downloaded data into the following directory structure:
 ### Training
 To train the model on InfAct
 
+Assume that you are located at `$MMACTION2/projects/ctrgcn`.
+Add the current folder to `PYTHONPATH`, so that Python can find your code. Run the following command in the current directory to add it.
+Please run it every time after you opened a new shell.
+For unix based system:
+```shell
+export PYTHONPATH=`pwd`:$PYTHONPATH
+```
+
+for windows:
+```shell
+set PYTHONPATH=%cd%;%PYTHONPATH%
+```
+
+**To train with single GPU:**
+
 ```
 mim train mmaction configs/ctrgcn_infact_plus_2d_primitive.py 
 --work-dir ../../../Results/ctrgcn_infact_plus_2d_primitive
@@ -49,11 +64,12 @@ mim train mmaction configs/ctrgcn_infact_plus_2d_primitive.py
 
 ### Inference
 
+**To test with single GPU:**
 
 ```
 mim test mmaction configs/ctrgcn_infact_plus_2d_primitive.py 
 --checkpoint <BEST_PERFORMING_CHECKPOINT> 
---dump ../../../Results/ctrgcn_infact_plus_2d_primitive/eval.pkl
+--dump ../../../Results/ctrgcn_infact_plus_2d_primitive/eval.pklR
 ```
 
 
