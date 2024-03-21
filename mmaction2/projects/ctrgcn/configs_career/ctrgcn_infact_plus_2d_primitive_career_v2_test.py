@@ -10,7 +10,7 @@ model = dict(
     cls_head=dict(type='GCNHead', num_classes=5, in_channels=256))
 
 dataset_type = 'PoseDataset'
-ann_file = '../../../Data/new_InfAct_plus_2d.pkl'
+ann_file = '../../../Data/new_InfAct_plus_2d_career_v2_test.pkl'
 train_pipeline = [
     dict(type='PreNormalize2D'),
     dict(type='GenSkeFeat', dataset='coco', feats=['j']),

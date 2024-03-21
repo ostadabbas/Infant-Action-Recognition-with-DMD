@@ -7,7 +7,7 @@ model = dict(
     cls_head=dict(type='GCNHead', num_classes=5, in_channels=256))
 
 dataset_type = 'PoseDataset'
-ann_file = '../Data/new_InfAct_plus.pkl'
+ann_file = '../Data/leave_out\leave_out_CAREER_D05.pkl'
 train_pipeline = [
     dict(type='PreNormalize2D'),
     dict(type='GenSkeFeat', dataset='coco', feats=['j']),

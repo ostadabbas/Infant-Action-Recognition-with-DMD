@@ -76,25 +76,16 @@ val_evaluator = [dict(type='AccMetric')]
 test_evaluator = val_evaluator
 
 train_cfg = dict(
-    type='EpochBasedTrainLoop', max_epochs=50, val_begin=1, val_interval=1)
+    type='EpochBasedTrainLoop', max_epochs=16, val_begin=1, val_interval=1)
 val_cfg = dict(type='ValLoop')
 test_cfg = dict(type='TestLoop')
 
 param_scheduler = [
     dict(
-        type='LinearLR',
-        start_factor=0.1,
-        by_epoch=True,
-        begin=0,
-        end=20,
-        convert_to_iter_based=True),
-    dict(
         type='CosineAnnealingLR',
-        T_max=30,
         eta_min=0,
+        T_max=16,
         by_epoch=True,
-        begin=20,
-        end=50,
         convert_to_iter_based=True)
 ]
 

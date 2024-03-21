@@ -3,5 +3,7 @@ Data
 ./Results*
 Results*
 *.avi
+*.mp4
 *.png
 *.jpg
+*.cmd

@@ -10,7 +10,7 @@ model = dict(
     cls_head=dict(type='GCNHead', num_classes=5, in_channels=256))
 
 dataset_type = 'PoseDataset'
-ann_file = '../../../Data/new_InfAct_plus_2d.pkl'
+ann_file = '../../../Data/InfAct_kfold/new_InfAct_plus_2d_4fold.pkl'
 train_pipeline = [
     dict(type='PreNormalize2D'),
     dict(type='GenSkeFeat', dataset='coco', feats=['j']),
@@ -72,7 +72,7 @@ test_dataloader = dict(
         type=dataset_type,
         ann_file=ann_file,
         pipeline=test_pipeline,
-        split='val',
+        split='train',
         test_mode=True))
 
 val_evaluator = [dict(type='AccMetric')]
