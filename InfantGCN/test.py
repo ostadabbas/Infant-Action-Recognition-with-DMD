@@ -61,9 +61,9 @@ if __name__ == "__main__":
     OUT_FOLDER = args.output_folder if args.output_folder is not None else "../Results_test"
     WORK_DIR = osp.join(OUT_FOLDER, EXP_NAME)
 
-    N_FEATS = 3
+    N_FEATS = 2
 
-    test_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d.pkl", 'val', window_size=60, random_selection="uniform_choose")
+    test_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d_yt_split.pkl", 'test', window_size=60, random_selection="uniform_choose")
     test_dataloader = DataLoader(test_dataset, batch_size=16, shuffle=False)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"

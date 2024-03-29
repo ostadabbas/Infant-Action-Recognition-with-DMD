@@ -83,10 +83,10 @@ if __name__ == "__main__":
     os.makedirs(WORK_DIR, exist_ok=True)
 
     
-    N_FEATS = 3
+    N_FEATS = 2
 
-    train_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d.pkl", 'train', window_size=60, random_selection="uniform_choose", repeat=REPEAT)
-    val_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d.pkl", 'val', window_size=60, random_selection="uniform_choose")
+    train_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d_yt_split.pkl", 'train', window_size=60, random_selection="uniform_choose", repeat=REPEAT)
+    val_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d_yt_split.pkl", 'val', window_size=60, random_selection="uniform_choose")
 
     train_dataloader = DataLoader(train_dataset, batch_size=16, shuffle=True)
     val_dataloader = DataLoader(val_dataset, batch_size=16, shuffle=False)

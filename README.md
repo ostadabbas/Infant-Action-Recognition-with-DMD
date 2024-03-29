@@ -49,7 +49,7 @@ python train.py [--epochs] [--model] [--base_lr] [--repeat] [--output_folder] [-
 - `base_lr`: The learning rate of the optimizer. Default value is `0.1`
 - `repeat`: Number of times that the training dataset is repeated to increase the size of the dataset
 - `output_folder`: The parent folder where the results will be saved
-- `output_folder`: The folder where the results will be saved
+- `exp_name`: The folder where the results will be saved
 
 #### Example:
 
@@ -78,7 +78,7 @@ python test.py [--model] [--weights] [--output_folder] [--exp_name]
 - `model`: The model which is used as the backbone of the recognition model. Please use either `CTRGCN` or `STCGN`
 - `weights`: The weights which will be loaded into the model
 - `output_folder`: The parent folder where the results have been previously be saved
-- `output_folder`: The folder where the results have been previously be saved
+- `exp_name`: The folder where the results have been previously be saved
 
 #### Example:
 
