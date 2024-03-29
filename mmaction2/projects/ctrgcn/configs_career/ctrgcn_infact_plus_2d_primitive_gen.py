@@ -10,11 +10,11 @@ model = dict(
     cls_head=dict(type='GCNHead', num_classes=5, in_channels=256))
 
 dataset_type = 'PoseDataset'
-ann_file = '../../../Data/InfAct_plus/InfAct_plus_2d_val_D01_D02_test_youtube.pkl'
+ann_file = '../../../Data\InfAct_plus\InfAct_plus_2d_gen.pkl'
 train_pipeline = [
     dict(type='PreNormalize2D'),
     dict(type='GenSkeFeat', dataset='coco', feats=['j']),
-    dict(type='UniformSampleFrames', clip_len=100),
+    dict(type='UniformSampleFrames', clip_len=60),
     dict(type='PoseDecode'),
     dict(type='FormatGCNInput', num_person=2),
     dict(type='PackActionInputs')
@@ -23,7 +23,7 @@ val_pipeline = [
     dict(type='PreNormalize2D'),
     dict(type='GenSkeFeat', dataset='coco', feats=['j']),
     dict(
-        type='UniformSampleFrames', clip_len=100, num_clips=1, test_mode=True),
+        type='UniformSampleFrames', clip_len=60, num_clips=1, test_mode=True),
     dict(type='PoseDecode'),
     dict(type='FormatGCNInput', num_person=2),
     dict(type='PackActionInputs')
@@ -32,7 +32,7 @@ test_pipeline = [
     dict(type='PreNormalize2D'),
     dict(type='GenSkeFeat', dataset='coco', feats=['j']),
     dict(
-        type='UniformSampleFrames', clip_len=100, num_clips=10,
+        type='UniformSampleFrames', clip_len=60, num_clips=10,
         test_mode=True),
     dict(type='PoseDecode'),
     dict(type='FormatGCNInput', num_person=2),
@@ -41,7 +41,7 @@ test_pipeline = [
 
 train_dataloader = dict(
     batch_size=16,
-    num_workers=2,
+    num_workers=8,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
     dataset=dict(
@@ -72,7 +72,7 @@ test_dataloader = dict(
         type=dataset_type,
         ann_file=ann_file,
         pipeline=test_pipeline,
-        split='val',
+        split='test',
         test_mode=True))
 
 val_evaluator = [dict(type='AccMetric')]

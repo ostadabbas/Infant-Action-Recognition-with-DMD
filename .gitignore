@@ -1,5 +1,7 @@
 ./Data
 Data
+./Outputs
+Outputs
 ./Results*
 Results*
 *.avi
@@ -7,3 +9,5 @@ Results*
 *.png
 *.jpg
 *.cmd
+*.ipynb
+*.pth
