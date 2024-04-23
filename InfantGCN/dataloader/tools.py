@@ -77,6 +77,20 @@ def uniform_choose(data_numpy, size, auto_pad=True):
         idxes = sorted(np.random.choice(np.arange(T), size, replace=False))
         return data_numpy[:, idxes, :, :]
 
+def break_data(data_numpy, len_sample, drop_last=True):
+    # input: C,T,V,M
+
+    C, T, V, M = data_numpy.shape
+    if T%len_sample != 0:
+        last = data_numpy[:, (T//len_sample)*len_sample:, :, :]
+        remains = data_numpy[:, :(T//len_sample)*len_sample, :, :]
+        broken_remains = remains.reshape(C, T//len_sample, len_sample, V, M).transpose((1, 0, 2, 3, 4))
+        output = [*[broken_remains[i] for i in range(len(broken_remains))], last]
+    else:
+        broken_remains = data_numpy.reshape(C, T//len_sample, len_sample, V, M).transpose((1, 0, 2, 3, 4))
+        output = [broken_remains[i] for i in range(len(broken_remains))]
+    return output
+
 
 def random_move(data_numpy,
                 angle_candidate=[-10., -5., 0., 5., 10.],

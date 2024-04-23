@@ -6,6 +6,7 @@ import math
 import tqdm
 import os
 import os.path as osp
+import glob
 from datetime import datetime
 
 from torch.utils.data import DataLoader
@@ -29,8 +30,14 @@ def get_parsers():
     parser.add_argument("--exp_name", help="name of the experiments", type=str)
     return parser
 
-def save_weights(model, name):
+def save_weights(model, name, rem_prev=None):
+    if rem_prev is not None:
+        pre_results = glob.glob(osp.join(WORK_DIR, f"{rem_prev}*.pth"))
+        assert len(pre_results)<=1
+        if len(pre_results)==1:
+            os.remove(pre_results[0])
     torch.save(model.state_dict(), osp.join(WORK_DIR, name))
+
 
 def do_epoch(mode, epoch_num, model, dataloader):
     if mode == 'train':
@@ -65,7 +72,7 @@ def do_epoch(mode, epoch_num, model, dataloader):
             epoch_loss = running_loss/len(dataloader)
             print(f"epoch: {epoch_num+1}, train_loss; {epoch_loss:.4f}, train acc: {accuracy:.4f}")
         else:
-            print(f"epoch: {epoch_num+1}, val acc: {accuracy:.4f}")
+            print(f"epoch: {epoch_num+1}, {mode} acc: {accuracy:.4f}")
     return accuracy
 
 if __name__ == "__main__":
@@ -85,8 +92,12 @@ if __name__ == "__main__":
     
     N_FEATS = 2
 
-    train_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d_yt_split.pkl", 'train', window_size=60, random_selection="uniform_choose", repeat=REPEAT)
-    val_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d_yt_split.pkl", 'val', window_size=60, random_selection="uniform_choose")
+    train_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d_yolo_3split.pkl", 'train', 
+                           window_size=60, random_selection="uniform_choose", repeat=REPEAT, break_samples=True)
+    val_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d_yolo_3split.pkl", 'val', 
+                         window_size=60, random_selection="uniform_choose", break_samples=False)
+
+    print(f"Number of training samples: {len(train_dataset)}, validation samples: {len(val_dataset)} and test samples: {len(test_dataset)}")
 
     train_dataloader = DataLoader(train_dataset, batch_size=16, shuffle=True)
     val_dataloader = DataLoader(val_dataset, batch_size=16, shuffle=False)
@@ -107,15 +118,18 @@ if __name__ == "__main__":
 
     ce_loss = nn.CrossEntropyLoss(reduction='mean')
     optimizer = torch.optim.AdamW(model.parameters(), lr=BASE_LR)#SGD(weight_decay=0.01, lr=0.1, params=stgcn.parameters())
-    scheduler1 = LinearLR(optimizer, start_factor=0.1, total_iters=len(train_dataloader)*40)
-    scheduler2 = CosineAnnealingLR(optimizer, eta_min=0, T_max = len(train_dataloader)*60)
+    scheduler1 = LinearLR(optimizer, start_factor=0.1, total_iters=len(train_dataloader)*0.4*EPOCHS)
+    scheduler2 = CosineAnnealingLR(optimizer, eta_min=0, T_max = len(train_dataloader)*0.6*EPOCHS)
     scheduler = ChainedScheduler([scheduler1, scheduler2])
 
-    best_acc = -1
+    best_val_acc = -1
     for epoch in range(EPOCHS):
         train_accuracy = do_epoch('train', epoch, model, train_dataloader)
-        test_accuracy = do_epoch('test', epoch, model, val_dataloader)
-        save_weights(model, f"epoch_{epoch+1}.pth")
-        if test_accuracy>best_acc:
-            save_weights(model, "best_results.pth")
-            best_acc = test_accuracy
+        val_accuracy = do_epoch('val', epoch, model, val_dataloader)
+
+        save_weights(model, f"epoch_{epoch+1:03d}.pth")
+        if val_accuracy>best_val_acc:
+            save_weights(model, 
+                              f"best_val_results_epoch_{epoch+1:03d}_acc_{val_accuracy:.2f}.pth",
+                              "best_val_results")
+            best_val_acc = val_accuracy

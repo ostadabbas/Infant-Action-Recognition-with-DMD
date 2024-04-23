@@ -36,20 +36,22 @@ def do_epoch(model, dataloader):
     total_predictions = 0
     all_preds  = []
     all_gts = []
+    all_feats = []
     with torch_mode():
         for batch_X, batch_y in tqdm.tqdm(dataloader):
             batch_X, batch_y = batch_X.to(device), batch_y.to(device)
-            batch_pred = model(batch_X)
+            batch_pred, batch_feats = model.extract_features(batch_X)
 
             _, predicted_labels = torch.max(batch_pred, 1)
             correct_predictions += (predicted_labels == batch_y).sum().item()
             total_predictions += batch_y.size(0)
             all_preds.extend(predicted_labels.cpu().numpy())
             all_gts.extend(batch_y.cpu().numpy())
+            all_feats.extend(batch_feats.cpu().numpy())
         accuracy = correct_predictions / total_predictions
 
         print(f"test acc: {accuracy:.4f}")
-    return accuracy, all_preds, all_gts
+    return accuracy, all_preds, all_gts, all_feats
 
 if __name__ == "__main__":
     parser = get_parsers()
@@ -63,7 +65,8 @@ if __name__ == "__main__":
 
     N_FEATS = 2
 
-    test_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d_yt_split.pkl", 'test', window_size=60, random_selection="uniform_choose")
+    test_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d_yolo_3split.pkl", 
+                          'test', window_size=60, random_selection="uniform_choose", break_samples=False)
     test_dataloader = DataLoader(test_dataset, batch_size=16, shuffle=False)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -79,6 +82,6 @@ if __name__ == "__main__":
 
     model.load_state_dict(torch.load(WEIGHTS))
 
-    test_accuracy, preds, gts = do_epoch(model, test_dataloader)
+    test_accuracy, preds, gts, feats = do_epoch(model, test_dataloader)
     with open(osp.join(WORK_DIR, "eval.pkl"), "wb") as f:
-        pickle.dump({"Accuracy": test_accuracy, "pred_label": preds, "gt_label": gts}, f)
+        pickle.dump({"Accuracy": test_accuracy, "pred_label": preds, "gt_label": gts, "feats": feats}, f)

@@ -37,7 +37,8 @@ class Feeder(torch.utils.data.Dataset):
                  random_move=False,
                  window_size=-1,
                  debug=False,
-                 repeat=1):
+                 repeat=1,
+                 break_samples=True):
         self.debug = debug
         self.data_path = data_path
         self.fold = fold
@@ -45,6 +46,7 @@ class Feeder(torch.utils.data.Dataset):
         self.random_move = random_move
         self.window_size = window_size
         self.repeat = repeat
+        self.break_samples = break_samples
 
         self.load_data()
 
@@ -59,6 +61,11 @@ class Feeder(torch.utils.data.Dataset):
             self.label  = [item['label'] for item in fold_files]
         except:
             self.label  = [POSLABEL2LABEL[item['pos_label']] for item in fold_files]
+        
+        self.validity = [item['validities'] if 'validities' in item.keys() else [True]*item['total_frames'] for item in fold_files]
+
+        if self.break_samples:
+            self.break_large_samples()
             
         if self.debug:
             self.data = self.data[0:100]
@@ -68,11 +75,44 @@ class Feeder(torch.utils.data.Dataset):
 
     def __len__(self):
         return self.repeat*len(self.label)
+    
+    def break_large_samples(self):
+        new_data = []
+        new_sample_name = []
+        new_label = []
+        new_validity = []
+
+        for d, n, l, v in zip(self.data, self.sample_name, self.label, self.validity):
+            if d.shape[1] > 150:
+                print("=====================================")
+                print(d.shape)
+                borken_samples = tools.break_data(d, 100, False)
+                assert type(borken_samples) == list
+                for bs in borken_samples:
+                    print(bs.shape)
+                new_data.extend(borken_samples)
+                new_sample_name.extend([n+"_broken_into_"+str(i) for i in range(len(borken_samples))])
+                new_label.extend([l]*len(borken_samples))
+                new_validity.extend([v[i:i+100] for i in range(0, d.shape[1], 100)])
+            else:
+                new_data.append(d)
+                new_sample_name.append(n)
+                new_label.append(l)
+                new_validity.append(v)
+        
+        self.data = new_data
+        self.sample_name = new_sample_name
+        self.label = new_label
+        self.validity = new_validity
 
     def __getitem__(self, index):
         # get data
         index = index%len(self.label)
-        data_numpy = np.array(self.data[index])
+        invalid_data_numpy = np.array(self.data[index])
+        validity_of_data = self.validity[index]
+        if np.any(validity_of_data)==False:
+            print(f"\nAll frames of same {self.sample_name[index]} are invalid\n")
+        data_numpy = invalid_data_numpy[:,validity_of_data,:,:]
         label = self.label[index]
         
         # processing
