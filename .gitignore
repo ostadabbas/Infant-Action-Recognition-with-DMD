@@ -11,3 +11,5 @@ Results*
 *.cmd
 *.ipynb
 *.pth
+__pycache__/
+*.pyc

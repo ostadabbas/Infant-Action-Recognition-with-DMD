@@ -23,6 +23,7 @@ import argparse
 def get_parsers():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="CTRGCN", help="The model used for recognition", type=str)
+    parser.add_argument("--data_path", help="The data used for recognition", type=str)
     parser.add_argument("--base_lr", default=0.1, help="Base learing rate", type=float)
     parser.add_argument("--epochs", default=20, help="number of epochs to train the dataset", type=int)
     parser.add_argument("--repeat", default=1, help="number of times to repeat training dataset", type=int)
@@ -81,6 +82,7 @@ if __name__ == "__main__":
 
     EPOCHS = args.epochs
     MODEL = args.model
+    DATA_PATH = args.data_path
     BASE_LR = args.base_lr
     REPEAT = args.repeat
     now = datetime.now().strftime("%m-%d-%y_%H-%M-%S")
@@ -92,17 +94,18 @@ if __name__ == "__main__":
     
     N_FEATS = 2
 
-    train_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d_yolo_3split.pkl", 'train', 
-                           window_size=60, random_selection="uniform_choose", repeat=REPEAT, break_samples=True)
-    val_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d_yolo_3split.pkl", 'val', 
-                         window_size=60, random_selection="uniform_choose", break_samples=False)
-
-    print(f"Number of training samples: {len(train_dataset)}, validation samples: {len(val_dataset)} and test samples: {len(test_dataset)}")
+    # train_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d_yt_split.pkl", 'train', window_size=60, random_selection="uniform_choose", repeat=REPEAT)
+    train_dataset = Feeder(DATA_PATH, 'train', window_size=60, random_selection="uniform_choose", repeat=REPEAT, break_samples=True)
+    # val_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d_yt_split.pkl", 'val', window_size=60, random_selection="uniform_choose")
+    val_dataset = Feeder(DATA_PATH, 'val', window_size=60, random_selection="uniform_choose")
+    
 
     train_dataloader = DataLoader(train_dataset, batch_size=16, shuffle=True)
     val_dataloader = DataLoader(val_dataset, batch_size=16, shuffle=False)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    # import ipdb
+    # ipdb.set_trace()
 
     graph_args = {'layout': f'infant{N_FEATS}d', 'strategy': 'spatial'}
     kwargs = {}

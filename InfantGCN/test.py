@@ -24,6 +24,7 @@ def get_parsers():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="CTRGCN", help="The model used for recognition", type=str)
     parser.add_argument("--weights", help="The model used for recognition", type=str)
+    parser.add_argument("--data_path", help="The data used for recognition", type=str)
     parser.add_argument("--output_folder", help="output folder to save the results", type=str)
     parser.add_argument("--exp_name", help="name of the experiments", type=str)
     return parser
@@ -60,13 +61,19 @@ if __name__ == "__main__":
     MODEL = args.model
     WEIGHTS = args.weights
     EXP_NAME = args.exp_name
+    DATA_PATH = args.data_path
     OUT_FOLDER = args.output_folder if args.output_folder is not None else "../Results_test"
     WORK_DIR = osp.join(OUT_FOLDER, EXP_NAME)
 
     N_FEATS = 2
 
+<<<<<<< HEAD
     test_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d_yolo_3split.pkl", 
                           'test', window_size=60, random_selection="uniform_choose", break_samples=False)
+=======
+    # test_dataset = Feeder(f"../Data/InfAct_plus/InfAct_plus_{N_FEATS}d_yolo.pkl", 'test', window_size=60, random_selection="uniform_choose")
+    test_dataset = Feeder(DATA_PATH, 'test', window_size=60, random_selection="uniform_choose")
+>>>>>>> 3d1fe52b4eeab95ed3164463dc51cda15bef0fea
     test_dataloader = DataLoader(test_dataset, batch_size=16, shuffle=False)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -82,6 +89,11 @@ if __name__ == "__main__":
 
     model.load_state_dict(torch.load(WEIGHTS))
 
+<<<<<<< HEAD
     test_accuracy, preds, gts, feats = do_epoch(model, test_dataloader)
+=======
+    test_accuracy, preds, gts = do_epoch(model, test_dataloader)
+    print("Test Accuracy: ", test_accuracy)
+>>>>>>> 3d1fe52b4eeab95ed3164463dc51cda15bef0fea
     with open(osp.join(WORK_DIR, "eval.pkl"), "wb") as f:
         pickle.dump({"Accuracy": test_accuracy, "pred_label": preds, "gt_label": gts, "feats": feats}, f)

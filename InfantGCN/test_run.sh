@@ -1,0 +1,1 @@
+python test.py --model CTRGCN --weights ../Results/CTRGCN_REC/best_results.pth   --data_path ../Data/InfAct_plus/InfAct_plus_2d_yolo_3split.pkl --output_folder ../Results --exp_name CTRGCN_REC
