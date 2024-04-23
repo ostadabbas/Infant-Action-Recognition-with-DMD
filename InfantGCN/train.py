@@ -97,7 +97,7 @@ if __name__ == "__main__":
     # train_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d_yt_split.pkl", 'train', window_size=60, random_selection="uniform_choose", repeat=REPEAT)
     train_dataset = Feeder(DATA_PATH, 'train', window_size=60, random_selection="uniform_choose", repeat=REPEAT, break_samples=True)
     # val_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d_yt_split.pkl", 'val', window_size=60, random_selection="uniform_choose")
-    val_dataset = Feeder(DATA_PATH, 'val', window_size=60, random_selection="uniform_choose")
+    val_dataset = Feeder(DATA_PATH, 'val', window_size=60, random_selection="uniform_choose", break_samples=False)
     
 
     train_dataloader = DataLoader(train_dataset, batch_size=16, shuffle=True)
