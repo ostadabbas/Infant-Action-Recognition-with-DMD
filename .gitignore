@@ -13,3 +13,4 @@ Results*
 *.pth
 __pycache__/
 *.pyc
+*.ipynb

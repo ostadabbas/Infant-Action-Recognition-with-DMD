@@ -3,21 +3,24 @@
 ## Environment
 
 Prepare the virtual environment:
-#SUBJECT TO CHANGE
-```shell
-conda create --name openmmlab python=3.8 -y
-conda activate openmmlab
-conda install pytorch torchvision -c pytorch  # This command will automatically install the latest version PyTorch and cudatoolkit, please check whether they match your environment.
-pip install -U openmim
-mim install mmengine
-mim install mmcv
-mim install mmdet  # optional
-mim install mmpose  # optional
-cd mmaction2
-pip install -v -e .
-```
-### Data preparation
 
+You can use the provided YAML file to create the environemt:
+```shell
+conda env create -f environment.yml
+conda activate infant_denoising
+```
+
+Otherwise, you will need to ensure that you have the following packages:
+```shell
+pytorch
+tqdm
+matplotlib
+scikit-learn
+```
+
+This code base is tested with python=3.11.0 and PyTorch==2.3.0
+
+### Data preparation
 
 <a name="InfActPrimitive"></a>
 Preprocessed  infant 2D and 3D skeleton data can be downloaded 

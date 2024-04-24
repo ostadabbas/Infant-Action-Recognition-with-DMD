@@ -68,7 +68,7 @@ if __name__ == "__main__":
     N_FEATS = 2
 
     # test_dataset = Feeder(f"../Data/InfAct_plus/InfAct_plus_{N_FEATS}d_yolo.pkl", 'test', window_size=60, random_selection="uniform_choose")
-    test_dataset = Feeder(DATA_PATH, 'test', window_size=60, random_selection="uniform_choose", break_samples=False)
+    test_dataset = Feeder(DATA_PATH, 'val', window_size=60, random_selection="uniform_choose", break_samples=False)
     test_dataloader = DataLoader(test_dataset, batch_size=16, shuffle=False)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
