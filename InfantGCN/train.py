@@ -61,6 +61,7 @@ def do_epoch(mode, epoch_num, model, dataloader):
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
+                scheduler = scheduler1 if epoch_num<0.4*EPOCHS else scheduler2
                 scheduler.step()
                 running_loss += loss.item()
 
@@ -71,7 +72,7 @@ def do_epoch(mode, epoch_num, model, dataloader):
 
         if mode=='train':
             epoch_loss = running_loss/len(dataloader)
-            print(f"epoch: {epoch_num+1}, train_loss; {epoch_loss:.4f}, train acc: {accuracy:.4f}")
+            print(f"epoch: {epoch_num+1}, train_loss; {epoch_loss:.4f}, train acc: {accuracy:.4f}, lr: {scheduler.get_last_lr()[0]:.5f}")
         else:
             print(f"epoch: {epoch_num+1}, {mode} acc: {accuracy:.4f}")
     return accuracy
@@ -123,8 +124,9 @@ if __name__ == "__main__":
     optimizer = torch.optim.AdamW(model.parameters(), lr=BASE_LR)#SGD(weight_decay=0.01, lr=0.1, params=stgcn.parameters())
     scheduler1 = LinearLR(optimizer, start_factor=0.1, total_iters=len(train_dataloader)*0.4*EPOCHS)
     scheduler2 = CosineAnnealingLR(optimizer, eta_min=0, T_max = len(train_dataloader)*0.6*EPOCHS)
-    scheduler = ChainedScheduler([scheduler1, scheduler2])
+    #scheduler = ChainedScheduler([scheduler1, scheduler2])
 
+    print(f"Training for {EPOCHS} epochs")
     best_val_acc = -1
     for epoch in range(EPOCHS):
         train_accuracy = do_epoch('train', epoch, model, train_dataloader)
