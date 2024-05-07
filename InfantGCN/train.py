@@ -96,7 +96,7 @@ if __name__ == "__main__":
     N_FEATS = 2
 
     # train_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d_yt_split.pkl", 'train', window_size=60, random_selection="uniform_choose", repeat=REPEAT)
-    train_dataset = Feeder(DATA_PATH, 'train', window_size=60, random_selection="uniform_choose", repeat=REPEAT, break_samples=True)
+    train_dataset = Feeder(DATA_PATH, 'train', window_size=60, random_selection="uniform_choose", repeat=REPEAT, break_samples=False)
     # val_dataset = Feeder(f"../Data\\InfAct_plus\\InfAct_plus_{N_FEATS}d_yt_split.pkl", 'val', window_size=60, random_selection="uniform_choose")
     val_dataset = Feeder(DATA_PATH, 'val', window_size=60, random_selection="uniform_choose", break_samples=False)
     
@@ -124,7 +124,7 @@ if __name__ == "__main__":
     optimizer = torch.optim.AdamW(model.parameters(), lr=BASE_LR)#SGD(weight_decay=0.01, lr=0.1, params=stgcn.parameters())
     scheduler1 = LinearLR(optimizer, start_factor=0.1, total_iters=len(train_dataloader)*0.4*EPOCHS)
     scheduler2 = CosineAnnealingLR(optimizer, eta_min=0, T_max = len(train_dataloader)*0.6*EPOCHS)
-    #scheduler = ChainedScheduler([scheduler1, scheduler2])
+    scheduler = ChainedScheduler([scheduler1, scheduler2])
 
     print(f"Training for {EPOCHS} epochs")
     best_val_acc = -1
