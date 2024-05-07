@@ -7,7 +7,6 @@ class Graph():
                  strategy='uniform',
                  max_hop=1,
                  dilation=1):
-        print(layout, strategy, max_hop, dilation)
         self.max_hop = max_hop
         self.dilation = dilation
 

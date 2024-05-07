@@ -84,12 +84,8 @@ class Feeder(torch.utils.data.Dataset):
 
         for d, n, l, v in zip(self.data, self.sample_name, self.label, self.validity):
             if d.shape[1] > 150:
-                print("=====================================")
-                print(d.shape)
                 borken_samples = tools.break_data(d, 100, False)
                 assert type(borken_samples) == list
-                for bs in borken_samples:
-                    print(bs.shape)
                 new_data.extend(borken_samples)
                 new_sample_name.extend([n+"_broken_into_"+str(i) for i in range(len(borken_samples))])
                 new_label.extend([l]*len(borken_samples))
