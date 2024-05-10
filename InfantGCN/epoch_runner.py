@@ -3,14 +3,13 @@ import torch
 from utils.logger import Logger
 
 class EpochRunner:
-    def __init__(self, model, device, logger, optimizer=None, scheduler_handler=None, loss_func=None, EPOCHS=None):
+    def __init__(self, model, device, optimizer=None, scheduler_handler=None, loss_func=None, EPOCHS=None):
         self.model = model
         self.optimizer = optimizer
         self.scheduler_handler = scheduler_handler
         self.loss_func = loss_func
         self.EPOCHS = EPOCHS
         self.device = device
-        self.log_handler = logger
 
     def run_epoch(self, mode, epoch_num, dataloader):
         if mode == 'train':
@@ -42,8 +41,8 @@ class EpochRunner:
 
             accuracy = correct_predictions / total_predictions
             epoch_loss = running_loss / len(dataloader)
-            self.log_handler.log_training(epoch_num+1,epoch_loss,accuracy,scheduler.get_last_lr()[0])
-            return accuracy
+            #self.log_handler.log_training(epoch_num+1,epoch_loss,accuracy,scheduler.get_last_lr()[0])
+            return accuracy, loss
 
     def validation_epoch(self, epoch_num, dataloader):
         self.model.eval()
@@ -64,5 +63,5 @@ class EpochRunner:
                 total_predictions += batch_y.size(0)
 
             accuracy = correct_predictions / total_predictions
-            self.log_handler.log_validation(epoch_num+1,accuracy)
+            #self.log_handler.log_validation(epoch_num+1,accuracy)
             return accuracy, all_preds, all_gts, all_feats

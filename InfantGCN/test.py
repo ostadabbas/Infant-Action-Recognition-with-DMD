@@ -50,8 +50,9 @@ if __name__ == "__main__":
 
     model.load_state_dict(torch.load(WEIGHTS))
     test_logger = Logger('train', osp.join(WORK_DIR, 'test_log.txt'))
-    epoch_runner = EpochRunner(model, device, test_logger)
+    epoch_runner = EpochRunner(model, device)
     test_accuracy, preds, gts, feats = epoch_runner.run_epoch('val', 0, test_dataloader)
+    test_logger.log_test(1,test_accuracy)
     with open(osp.join(WORK_DIR, "eval.pkl"), "wb") as f:
         pickle.dump({"Accuracy": test_accuracy, "pred_label": preds, "gt_label": gts, "feats": feats}, f)
 
