@@ -24,3 +24,6 @@ class Logger:
 
     def log_validation(self, epoch, accuracy):
         self.logger.info(f"Validation: Epoch: {epoch}, Accuracy: {accuracy:.4f}")
+
+    def log_test(self, epoch, accuracy):
+        self.logger.info(f"Test: Epoch: {epoch}, Accuracy: {accuracy:.4f}")
