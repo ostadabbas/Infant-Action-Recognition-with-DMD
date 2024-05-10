@@ -3,10 +3,10 @@ import torch
 from utils.logger import Logger
 
 class EpochRunner:
-    def __init__(self, model, device, logger, optimizer=None, scheduler_func=None, loss_func=None, EPOCHS=None):
+    def __init__(self, model, device, logger, optimizer=None, scheduler_handler=None, loss_func=None, EPOCHS=None):
         self.model = model
         self.optimizer = optimizer
-        self.scheduler = scheduler_func
+        self.scheduler_handler = scheduler_handler
         self.loss_func = loss_func
         self.EPOCHS = EPOCHS
         self.device = device
@@ -33,7 +33,7 @@ class EpochRunner:
                 loss.backward()
                 self.optimizer.step()
 
-                scheduler = self.scheduler(epoch_num)
+                scheduler = self.scheduler_handler(epoch_num)
                 scheduler.step()
 
                 running_loss += loss.item()

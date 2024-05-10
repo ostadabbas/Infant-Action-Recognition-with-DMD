@@ -54,3 +54,6 @@ if __name__ == "__main__":
     test_accuracy, preds, gts, feats = epoch_runner.run_epoch('val', 0, test_dataloader)
     with open(osp.join(WORK_DIR, "eval.pkl"), "wb") as f:
         pickle.dump({"Accuracy": test_accuracy, "pred_label": preds, "gt_label": gts, "feats": feats}, f)
+
+    test_logger.log_message(f"Testing complete")
+    test_logger.log_message(f"Test Accuracy: {test_accuracy}")
