@@ -70,7 +70,7 @@ assuming the code root as ``${REC_ROOT}``, please navigate into the InfantGCN di
 ```shell
 cd ${REC_ROOT}/InfantGCN
 ```
-To start the training, use the following script:
+To start the inference, use the following script:
 
 ```shell
 python test.py [--model] [--weights] [--output_folder] [--exp_name]
@@ -98,7 +98,7 @@ assuming the code root as ``${REC_ROOT}``, please navigate into the InfantGCN di
 ```shell
 cd ${REC_ROOT}/InfantGCN
 ```
-To start the training, use the following script:
+To start the visualization, use the following script:
 
 ```shell
 python visualize.py [--eval_file]
