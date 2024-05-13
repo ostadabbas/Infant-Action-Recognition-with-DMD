@@ -106,7 +106,7 @@ python visualize.py [--eval_file]
 
 #### Arguments
 
-- `model`: the result of the execution of a previous test command
+- `eval_file`: the result of the execution of a previous test command saved as a pickle file
 
 #### Example:
 
@@ -115,7 +115,3 @@ python visualize.py --eval_file ../Results/CTRGCN_REC/eval.pkl
 ```
 
 The visualized confusion matrix will be save as  ``${REC_ROOT}/Results/CTRGCN_REC/cm.png``<br/>
-
-
-
-
