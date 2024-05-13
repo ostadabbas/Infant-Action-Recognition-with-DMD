@@ -42,10 +42,11 @@ class EpochRunner:
             accuracy = correct_predictions / total_predictions
             epoch_loss = running_loss / len(dataloader)
             #self.log_handler.log_training(epoch_num+1,epoch_loss,accuracy,scheduler.get_last_lr()[0])
-            return accuracy, loss
+            return accuracy, epoch_loss
 
     def validation_epoch(self, epoch_num, dataloader):
         self.model.eval()
+        running_loss = 0
         all_preds, all_gts, all_feats = [], [], []
         total_predictions = 0
         correct_predictions = 0
@@ -55,13 +56,17 @@ class EpochRunner:
                 batch_pred, batch_feats = self.model.extract_features(batch_X)
                 _, predicted_labels = torch.max(batch_pred, 1)
 
+                loss = self.loss_func(batch_pred, batch_y)
+
                 all_preds.extend(predicted_labels.cpu().numpy())
                 all_gts.extend(batch_y.cpu().numpy())
                 all_feats.extend(batch_feats.cpu().numpy())
 
+                running_loss += loss.item()
                 correct_predictions += (predicted_labels == batch_y).sum().item()
                 total_predictions += batch_y.size(0)
 
             accuracy = correct_predictions / total_predictions
+            epoch_loss = running_loss / len(dataloader)
             #self.log_handler.log_validation(epoch_num+1,accuracy)
-            return accuracy, all_preds, all_gts, all_feats
+            return accuracy, epoch_loss, all_preds, all_gts, all_feats

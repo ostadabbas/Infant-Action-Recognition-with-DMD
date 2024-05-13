@@ -2,6 +2,8 @@
 Data
 ./Outputs
 Outputs
+./figs
+figs
 ./Results*
 Results*
 *.avi
@@ -14,3 +16,4 @@ Results*
 __pycache__/
 *.pyc
 *.ipynb
+*.pt

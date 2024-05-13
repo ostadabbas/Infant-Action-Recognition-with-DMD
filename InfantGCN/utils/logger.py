@@ -22,8 +22,8 @@ class Logger:
     def log_training(self, epoch, loss, accuracy, lr):
         self.logger.info(f"Train: Epoch: {epoch}, Loss: {loss:.4f}, Accuracy: {accuracy:.4f}, Learning Rate: {lr:.5f}")
 
-    def log_validation(self, epoch, accuracy):
-        self.logger.info(f"Validation: Epoch: {epoch}, Accuracy: {accuracy:.4f}")
+    def log_validation(self, epoch, loss, accuracy):
+        self.logger.info(f"Validation: Epoch: {epoch}, Loss: {loss:.4f}, Accuracy: {accuracy:.4f}")
 
-    def log_test(self, epoch, accuracy):
-        self.logger.info(f"Test: Epoch: {epoch}, Accuracy: {accuracy:.4f}")
+    def log_test(self, epoch, loss, accuracy):
+        self.logger.info(f"Test: Epoch: {epoch}, Loss: {loss:.4f}, Accuracy: {accuracy:.4f}")

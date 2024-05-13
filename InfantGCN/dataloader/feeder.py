@@ -51,7 +51,7 @@ class Feeder(torch.utils.data.Dataset):
         self.load_data()
 
     def load_data(self):
-        # data: N C V T M
+        # data: N C T V M
         with open(self.data_path, 'rb') as f:
             file = pickle.load(f)
         fold_files = [item for item in file['annotations'] if item['frame_dir'] in file['split'][self.fold]]

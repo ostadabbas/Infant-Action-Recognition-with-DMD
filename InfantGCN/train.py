@@ -11,7 +11,7 @@ from datetime import datetime
 from torch.utils.data import DataLoader
 from torch.optim import SGD
 
-from torch.optim.lr_scheduler import LinearLR, CosineAnnealingLR, ChainedScheduler, MultiStepLR
+from torch.optim.lr_scheduler import LinearLR, CosineAnnealingLR, ChainedScheduler, MultiStepLR, CyclicLR, ExponentialLR
 
 from net.stgcn import STGCN
 from net.ctrgcn import CTRGCN
@@ -20,7 +20,7 @@ from utils.logger import Logger
 from utils.training_utils import save_weights
 from utils.parsers import get_training_parser
 from epoch_runner import EpochRunner
-from utils.training_utils import CompoundScheduler
+from utils.training_utils import get_lr_scheduler
 
 
 if __name__ == "__main__":
@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
     test_dataset = Feeder(DATA_PATH, 'test', window_size=60, random_selection="uniform_choose", break_samples=False)
     test_dataloader = DataLoader(test_dataset, batch_size=16, shuffle=False)
-    
+
     device = "cuda" if torch.cuda.is_available() else "cpu"
     # import ipdb
     # ipdb.set_trace()
@@ -70,24 +70,8 @@ if __name__ == "__main__":
     ce_loss = nn.CrossEntropyLoss(reduction='mean')
     optimizer = torch.optim.AdamW(model.parameters(), lr=BASE_LR)#SGD(weight_decay=0.01, lr=0.1, params=stgcn.parameters())
         
-    steps = [0.4*EPOCHS,1*EPOCHS]
-    scheduler1 = LinearLR(optimizer, start_factor=0.1, total_iters=int(iterations_per_epoch * 0.4 * EPOCHS))
-    scheduler2 = CosineAnnealingLR(optimizer, eta_min=0.001, T_max=int(iterations_per_epoch * 0.6 * EPOCHS))
-    schedulers = [scheduler1,scheduler2]
-    compound_scheduler = CompoundScheduler(schedulers, steps)
-    
-    """steps = [0.2*EPOCHS,0.5*EPOCHS,1*EPOCHS]
-    scheduler1 = LinearLR(optimizer, start_factor=0.1, total_iters=int(iterations_per_epoch * 0.2 * EPOCHS))
-    scheduler2 = CosineAnnealingLR(optimizer, eta_min=0.001, T_max=int(iterations_per_epoch * 0.3 * EPOCHS))
-    scheduler3 = LinearLR(optimizer, start_factor=1, total_iters=int(iterations_per_epoch * 0.5 * EPOCHS))
-    schedulers = [scheduler1,scheduler2,scheduler3]
-    compound_scheduler = CompoundScheduler(schedulers, steps)"""
-    
 
-    """scheduler1 = MultiStepLR(optimizer, milestones=[(1/4)*EPOCHS*iterations_per_epoch,(2/4)*EPOCHS*iterations_per_epoch], gamma=0.1)
-    schedulers = [scheduler1]
-    steps = [1*EPOCHS]
-    compound_scheduler = CompoundScheduler(schedulers, steps)"""
+    compound_scheduler = get_lr_scheduler(optimizer, 'OneCycleLR', EPOCHS, iterations_per_epoch, {'base_lr': BASE_LR, 'pct_start': 0.2})
 
     train_logger = Logger('train', osp.join(WORK_DIR, 'train_log.txt'))
     train_logger.log_message(f"Training parameters:")
@@ -106,11 +90,11 @@ if __name__ == "__main__":
         train_accuracy, train_loss = epoch_runner.run_epoch('train', epoch, train_dataloader)
         train_logger.log_training(epoch+1,train_loss,train_accuracy,compound_scheduler(epoch).get_last_lr()[0])
 
-        val_accuracy, _, _, _ = epoch_runner.run_epoch('val', epoch, val_dataloader)
-        train_logger.log_validation(epoch+1,val_accuracy)
+        val_accuracy, val_loss, _, _, _ = epoch_runner.run_epoch('val', epoch, val_dataloader)
+        train_logger.log_validation(epoch+1,val_loss,val_accuracy)
 
-        test_accuracy, _, _, _ = epoch_runner.run_epoch('test', epoch, test_dataloader)
-        train_logger.log_test(epoch+1,test_accuracy)
+        test_accuracy, test_loss, _, _, _ = epoch_runner.run_epoch('test', epoch, test_dataloader)
+        train_logger.log_test(epoch+1,test_loss,test_accuracy)
         
 
         save_weights(model, f"epoch_{epoch+1:03d}.pth", WORK_DIR)
