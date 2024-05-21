@@ -12,6 +12,10 @@ from matplotlib.colors import Normalize
 import matplotlib.lines as mlines
 import argparse
 import os.path as osp
+import seaborn as sns
+
+from utils.parsers import get_visualization_parser
+
 
 def set_ax_borders(ax, top, right, bottom, left):
     ax.spines['top'].set_visible(top)
@@ -26,10 +30,20 @@ def get_acc(gts, preds):
 def plot_cm(gts, preds, ax=None):
     acc = get_acc(gt_labels, pred_labels)
     labels = list(POSTURE_IDS2LABEL.values())
-    cm = ConfusionMatrixDisplay.from_predictions(y_true=gts, y_pred=preds, normalize='true', 
-                                                 display_labels=labels, ax=ax, values_format='.2f', 
-                                                 cmap='Blues_r')
-    cm.ax_.set_title(f"Accuracy: {acc*100:.2f}%")
+    cm = confusion_matrix(gts, preds)
+    cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+    #disp = ConfusionMatrixDisplay(cm, display_labels=labels)
+    #cm_disp = disp.plot(ax=ax, values_format='.1f', cmap='Blues_r')
+    #cm = ConfusionMatrixDisplay.from_predictions(y_true=gts, y_pred=preds, normalize='true', 
+    #                                             display_labels=labels, ax=ax, values_format='.1f', 
+    #                                             cmap='Blues_r')
+    #cm_disp.ax_.set_title(f"Accuracy: {acc*100:.2f}%")
+    sns.heatmap(cm, annot=True, fmt=".1%", ax=ax,
+                cmap="Blues_r", vmin=0, vmax=1,
+                xticklabels=labels, yticklabels=labels)
+    ax.set_ylabel('True label')
+    ax.set_xlabel('Predicted label')
+    ax.set_title(f"Accuracy: {acc*100:.2f}%")
     return cm
 
 def compress_latents(latents, compressor_method=PCA):
@@ -38,8 +52,7 @@ def compress_latents(latents, compressor_method=PCA):
     return pred_feats
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--eval_file", help="The model used for recognition", type=str)
+    parser = get_visualization_parser()
     args = parser.parse_args()
     FILE = args.eval_file
     OUTPUT_FILE = osp.join(osp.dirname(FILE), "cm.png")

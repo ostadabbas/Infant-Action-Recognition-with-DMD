@@ -4,6 +4,10 @@ import os
 import os.path as osp
 from torch.optim.lr_scheduler import LinearLR, CosineAnnealingLR, MultiStepLR, CyclicLR, ExponentialLR, OneCycleLR
 
+def load_weights(model, path):
+    model.load_state_dict(torch.load(path))
+    return model
+
 def save_weights(model, name, work_dir, rem_prev=None):
     if rem_prev is not None:
         pre_results = glob.glob(osp.join(work_dir, f"{rem_prev}*.pth"))

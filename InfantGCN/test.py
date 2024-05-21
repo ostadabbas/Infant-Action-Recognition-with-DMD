@@ -19,6 +19,7 @@ from net.ctrgcn import CTRGCN
 from dataloader import Feeder
 from utils.logger import Logger
 from utils.parsers import get_testing_parser
+from utils.training_utils import load_weights
 from epoch_runner import EpochRunner
 
 if __name__ == "__main__":
@@ -48,13 +49,19 @@ if __name__ == "__main__":
     elif MODEL=="CTRGCN":
         model = CTRGCN(input_dim, num_classes, graph_args, **kwargs).to(device)
 
-    model.load_state_dict(torch.load(WEIGHTS))
-    test_logger = Logger('train', osp.join(WORK_DIR, 'test_log.txt'))
-    epoch_runner = EpochRunner(model, device)
+    ce_loss = nn.CrossEntropyLoss(reduction='mean')
+
+    test_logger = Logger('test', osp.join(WORK_DIR, 'test_log.txt'))
+
+    model = load_weights(model, WEIGHTS)
+    test_logger.log_message(f"Model loaded from {WEIGHTS}")
+
+    epoch_runner = EpochRunner(model, device, loss_func=ce_loss)
+
     test_accuracy, test_loss, preds, gts, feats = epoch_runner.run_epoch('val', 0, test_dataloader)
-    test_logger.log_test(1,test_loss,test_accuracy)
     with open(osp.join(WORK_DIR, "eval.pkl"), "wb") as f:
         pickle.dump({"Accuracy": test_accuracy, "pred_label": preds, "gt_label": gts, "feats": feats}, f)
 
+    test_logger.log_test(0,test_loss,test_accuracy)
     test_logger.log_message(f"Testing complete")
     test_logger.log_message(f"Test Accuracy: {test_accuracy}")

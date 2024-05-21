@@ -122,7 +122,7 @@ class STGCN(nn.Module):
 
         return x
 
-    def extract_feature(self, x):
+    def extract_features(self, x):
 
         # data normalization
         N, C, T, V, M = x.size()
@@ -137,14 +137,14 @@ class STGCN(nn.Module):
         for gcn, importance in zip(self.st_gcn_networks, self.edge_importance):
             x, _ = gcn(x, self.A * importance)
 
-        clip_features = F.avg_pool2d(x, x.size()[2:])
-        clip_features = clip_features.view(N, M, -1, 1, 1).mean(dim=1)
-
-        _, c, t, v = x.size()
-        node_features = x.view(N, M, c, t, v).permute(0, 2, 3, 4, 1)
+        # global pooling
+        x = F.avg_pool2d(x, x.size()[2:])
+        feats = x.view(N, M, -1, 1, 1).mean(dim=1)
 
         # prediction
-        x = self.fcn(x)
-        logits = x.view(N, M, -1, t, v).permute(0, 2, 3, 4, 1)
+        x = self.fcn(feats)
 
-        return logits, clip_features, node_features
+        feats = feats.view(feats.size(0), -1)
+        x = x.view(x.size(0), -1)
+
+        return x, feats

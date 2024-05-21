@@ -15,10 +15,16 @@ def get_training_parser():
     parser.add_argument("--base_lr", default=0.1, help="Base learning rate", type=float)
     parser.add_argument("--epochs", default=20, help="Number of epochs to train the dataset", type=int)
     parser.add_argument("--repeat", default=1, help="Number of times to repeat training dataset", type=int)
+    parser.add_argument("--weights", help="Path to the model weights file", type=str, required=False)
     return parser
 
 def get_testing_parser():
     """Extend the base parser with testing-specific arguments."""
     parser = get_base_parser()
-    parser.add_argument("--weights", help="Path to the model weights file", type=str)
+    parser.add_argument("--weights", help="Path to the model weights file", type=str, required=True)
+    return parser
+
+def get_visualization_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--eval_file", help="The model used for recognition", type=str)
     return parser

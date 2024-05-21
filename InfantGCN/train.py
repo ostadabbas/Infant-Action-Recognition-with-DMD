@@ -17,7 +17,7 @@ from net.stgcn import STGCN
 from net.ctrgcn import CTRGCN
 from dataloader import Feeder
 from utils.logger import Logger
-from utils.training_utils import save_weights
+from utils.training_utils import save_weights, load_weights
 from utils.parsers import get_training_parser
 from epoch_runner import EpochRunner
 from utils.training_utils import get_lr_scheduler
@@ -32,6 +32,7 @@ if __name__ == "__main__":
     DATA_PATH = args.data_path
     BASE_LR = args.base_lr
     REPEAT = args.repeat
+    WEIGHTS = args.weights
     now = datetime.now().strftime("%m-%d-%y_%H-%M-%S")
     EXP_NAME = args.exp_name if args.exp_name is not None else f"exp_{now}"
     OUT_FOLDER = args.output_folder if args.output_folder is not None else "../Results_test"
@@ -40,7 +41,7 @@ if __name__ == "__main__":
     
     N_FEATS = 2
 
-    train_dataset = Feeder(DATA_PATH, 'train', window_size=60, random_selection="uniform_choose", repeat=REPEAT, break_samples=True)
+    train_dataset = Feeder(DATA_PATH, 'train', window_size=60, random_selection="uniform_choose", repeat=REPEAT, break_samples=False)
     val_dataset = Feeder(DATA_PATH, 'val', window_size=60, random_selection="uniform_choose", break_samples=False)
     
 
@@ -70,8 +71,7 @@ if __name__ == "__main__":
     ce_loss = nn.CrossEntropyLoss(reduction='mean')
     optimizer = torch.optim.AdamW(model.parameters(), lr=BASE_LR)#SGD(weight_decay=0.01, lr=0.1, params=stgcn.parameters())
         
-
-    compound_scheduler = get_lr_scheduler(optimizer, 'OneCycleLR', EPOCHS, iterations_per_epoch, {'base_lr': BASE_LR, 'pct_start': 0.2})
+    compound_scheduler = get_lr_scheduler(optimizer, 'CosineAnnealingLRwithWarmupFixed', EPOCHS, iterations_per_epoch, {'min_lr': 0.001})
 
     train_logger = Logger('train', osp.join(WORK_DIR, 'train_log.txt'))
     train_logger.log_message(f"Training parameters:")
@@ -79,12 +79,15 @@ if __name__ == "__main__":
     train_logger.log_message(f"Data: {DATA_PATH}")
     train_logger.log_message(f"Base learning rate: {BASE_LR}")
     train_logger.log_message(f"Repeat: {REPEAT}")
-    train_logger.log_message(f"Training for {EPOCHS} epochs")
+    if WEIGHTS is not None:
+        model.load_state_dict(torch.load(WEIGHTS))
+        train_logger.log_message(f"Loaded weights from {WEIGHTS}")
+
 
     best_val_acc = -1
     best_epoch_name_str = None
-
     epoch_runner = EpochRunner(model, device, optimizer, compound_scheduler, ce_loss, EPOCHS)
+    train_logger.log_message(f"Training for {EPOCHS} epochs")
     for epoch in range(EPOCHS):
         
         train_accuracy, train_loss = epoch_runner.run_epoch('train', epoch, train_dataloader)
