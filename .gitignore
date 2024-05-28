@@ -17,3 +17,7 @@ __pycache__/
 *.pyc
 *.ipynb
 *.pt
+./Curves
+Curves
+mmaction2
+./mmaction2
