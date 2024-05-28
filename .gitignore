@@ -18,6 +18,10 @@ __pycache__/
 *.ipynb
 *.pt
 ./Curves
+<<<<<<< HEAD
 Curves
 mmaction2
 ./mmaction2
+=======
+Curves
+>>>>>>> origin/master
