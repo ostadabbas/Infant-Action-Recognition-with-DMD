@@ -22,16 +22,15 @@ This code base is tested with python=3.11.0 and PyTorch==2.3.0
 
 ### Data preparation
 
-<a name="InfActPrimitive"></a>
-Preprocessed  infant 2D and 3D skeleton data can be downloaded 
+<a name="INFANTS"></a>
+Preprocessed  INFANTS skeleton data can be downloaded 
 [here](https://drive.google.com/file/d/10z5dbOXk76nOhmeLpYDnNtnOT1xYGvkc/view?usp=sharing)<br/>
 Put downloaded data into the following directory structure:
 
 ```
 - Data/
-  - InfAct_plus/
-    -InfAct_plus_2d.pkl
-    -InfAct_plus_3d.pkl
+  - INFANTS/
+    -INFANTS.pkl
 ```
 
 ### Training
