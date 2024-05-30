@@ -2,8 +2,6 @@
 Data
 ./Outputs
 Outputs
-./figs
-figs
 ./Results*
 Results*
 *.avi
