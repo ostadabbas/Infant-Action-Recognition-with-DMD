@@ -13,16 +13,27 @@ conda activate infant_denoising
 Otherwise, you will need to ensure that you have the following packages:
 ```shell
 pytorch
+torchvision
 tqdm
 matplotlib
 scikit-learn
+seaborn
+numpy
+pandas
 ```
 
 This code base is tested with python=3.11.0 and PyTorch==2.3.0
 
-### Data preparation
+## Data preparation
 
+### Preprocessing Data
+For object detection and multi-person tracking, please refer to [Ultralytics YOLO Docs](https://docs.ultralytics.com/modes/track/ "Multi-Object Tracking with Ultralytics YOLO"). For our implementation, we used "Yolov8n-pose" and "BOT-SoRT" tracker.
+
+For infant-specific pose estimation, please refer to [Fine-tuned Domain-adapted Infant Pose (FiDIP)](https://github.com/ostadabbas/Infant-Pose-Estimation "Github Repository of FiDiP")
+
+### Data Download
 <a name="INFANTS"></a>
+We have also added the processed skeletons of the INFANTS dataset directly for download.
 Preprocessed  INFANTS skeleton data can be downloaded 
 [here](https://drive.google.com/file/d/10z5dbOXk76nOhmeLpYDnNtnOT1xYGvkc/view?usp=sharing)<br/>
 Put downloaded data into the following directory structure:
@@ -33,7 +44,7 @@ Put downloaded data into the following directory structure:
     -INFANTS.pkl
 ```
 
-### Training
+## Training
 To train the action recognition model, the train script must be executed
 assuming the code root as ``${REC_ROOT}``, please navigate into the InfantGCN directory by
 ```shell
@@ -63,7 +74,7 @@ The results of the following experiments will be saved in ``${REC_ROOT}/Results/
 In each experiments, weights after each training epoch will be save as ``$epoch_{epoch_num}.pth``<br/>
 The weights which yields the best validation accuracy will be saved as ``best_results.pth``
 
-### Testing
+## Testing
 To test the action recognition model, the test script must be executed
 assuming the code root as ``${REC_ROOT}``, please navigate into the InfantGCN directory by
 ```shell
@@ -91,7 +102,7 @@ python test.py --model CTRGCN --weights ../Results/CTRGCN_REC/best_results.pth -
 The results of the test will be save as ``${REC_ROOT}/Results/CTRGCN_REC/eval.pkl``<br/>
 This pickle file contains the predicted and ground truth labels for each samples in the test dataset, and the accuracy accross the dataset
 
-### Visualizing
+## Visualizing
 To visualize the action recognition model, the test script must be executed
 assuming the code root as ``${REC_ROOT}``, please navigate into the InfantGCN directory by
 ```shell
