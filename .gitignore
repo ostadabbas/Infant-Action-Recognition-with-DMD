@@ -19,3 +19,7 @@ __pycache__/
 Curves
 mmaction2
 ./mmaction2
+
+
+!figs/*.png
+!figs/*.jpg
