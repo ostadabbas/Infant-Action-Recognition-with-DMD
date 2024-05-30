@@ -1,4 +1,37 @@
-# Infant Action Recognition
+# Infant Action Recognition with DMD
+
+Codes and experiments for the following paper:
+Yanjun Zhu and Pooria daneshvar Kakhaki, Agata Lapedriza, Sarah Ostadabbas, “Diffusion-based Motion Denoising for Robust Infant Action Recognition” [NeurIPS 2024 UNDER REVIEW]
+
+Contact:  
+**Yanjun Zhu**  
+Email: [ya.zhu@northeastern.edu](mailto:ya.zhu@northeastern.edu)  
+**Pooria daneshvar Kakhaki**  
+Email: [daneshvarkakhaki.p@northeastern.edu](mailto:daneshvarkakhaki.p@northeastern.edu)  
+**Sarah Ostadbass**  
+Email: [s.ostadabbas@northeastern.edu](mailto:s.ostadabbas@northeastern.edu)
+
+
+
+### Table of Contents
+1. [Introduction](#introduction)
+2. [Environment](#environment)
+3. [Data Preparation](#data-preparation)
+    1. [Preprocessing Data](#preprocessing-data)
+    2. [Data Download](#data-download)
+4. [Infant Action Recognition](#infant-action-recognition)
+    1. [Training](#training)
+    2. [Testing](#testing)
+    3. [Visualizing](#visualizing)
+5. [Diffusion-based Motion Denoising](#diffusion-based-motion-denoising)
+
+## Introduction
+
+This repository contains the code for the paper "Diffusion-based Motion Denoising for Robust Infant Action Recognition". We propose a novel method for infant action recognition that combines a graph convolutional network (GCN) with a diffusion-based motion denoising (DMD) model. The GCN is used to extract the spatial and temporal features of the infant's skeleton data, while the DMD model is used to denoise the motion data.
+
+![Qualitative samples](figs\qualitive_results.png)
+
+The code is divided into two main parts: Infant Action Recognition and Diffusion-based Motion Denoising. The former is responsible for training and testing the action recognition model, while the latter is responsible for training and testing the diffusion-based motion denoising model.
 
 ## Environment
 
@@ -43,8 +76,9 @@ Put downloaded data into the following directory structure:
   - INFANTS/
     -INFANTS.pkl
 ```
+## Infant action recognition
 
-## Training
+### Training
 To train the action recognition model, the train script must be executed
 assuming the code root as ``${REC_ROOT}``, please navigate into the InfantGCN directory by
 ```shell
@@ -74,7 +108,7 @@ The results of the following experiments will be saved in ``${REC_ROOT}/Results/
 In each experiments, weights after each training epoch will be save as ``$epoch_{epoch_num}.pth``<br/>
 The weights which yields the best validation accuracy will be saved as ``best_results.pth``
 
-## Testing
+### Testing
 To test the action recognition model, the test script must be executed
 assuming the code root as ``${REC_ROOT}``, please navigate into the InfantGCN directory by
 ```shell
@@ -102,7 +136,7 @@ python test.py --model CTRGCN --weights ../Results/CTRGCN_REC/best_results.pth -
 The results of the test will be save as ``${REC_ROOT}/Results/CTRGCN_REC/eval.pkl``<br/>
 This pickle file contains the predicted and ground truth labels for each samples in the test dataset, and the accuracy accross the dataset
 
-## Visualizing
+### Visualizing
 To visualize the action recognition model, the test script must be executed
 assuming the code root as ``${REC_ROOT}``, please navigate into the InfantGCN directory by
 ```shell
@@ -125,3 +159,5 @@ python visualize.py --eval_file ../Results/CTRGCN_REC/eval.pkl
 ```
 
 The visualized confusion matrix will be save as  ``${REC_ROOT}/Results/CTRGCN_REC/cm.png``<br/>
+
+## Diffusion-based motion Denoising
