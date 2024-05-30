@@ -29,7 +29,7 @@ Email: [s.ostadabbas@northeastern.edu](mailto:s.ostadabbas@northeastern.edu)
 
 This repository contains the code for the paper "Diffusion-based Motion Denoising for Robust Infant Action Recognition". We propose a novel method for infant action recognition that combines a graph convolutional network (GCN) with a diffusion-based motion denoising (DMD) model. The GCN is used to extract the spatial and temporal features of the infant's skeleton data, while the DMD model is used to denoise the motion data.
 
-![Qualitative samples](figs\qualitive_results.png)
+![Qualitative samples](figs\qualitative_results.png)
 
 The code is divided into two main parts: Infant Action Recognition and Diffusion-based Motion Denoising. The former is responsible for training and testing the action recognition model, while the latter is responsible for training and testing the diffusion-based motion denoising model.
 
