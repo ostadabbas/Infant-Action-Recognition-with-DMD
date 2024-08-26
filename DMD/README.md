@@ -12,8 +12,12 @@ This a an implementation of DMD for 3D motion denoising on Human 3.6M dataset. A
 <p>
 
 ```
+pytorch
 einops
 zarr
+pandas
+scipy
+numpy
 ```
 </p>
 </details> 
@@ -27,17 +31,17 @@ We follow https://github.com/wei-mao-2019/gsps for Human3.6M dataset preparation
 All data needed can be downloaded from [Google Drive](https://drive.google.com/drive/folders/1sb1n9l0Na5EqtapDVShOJJ-v6o-GZrIJ?usp=sharing) and place all the dataset in ``data`` folder inside the root of this repo.
 
 
-## Evaluation
-
-Human3.6M:
-```
-python train.py --cfg h36m --test
-```
-
-
 ## Training
 
 Human3.6M:
 ```
 python train.py --cfg h36m
+```
+
+
+## Evaluation
+
+Human3.6M:
+```
+python train.py --cfg h36m --test
 ```
