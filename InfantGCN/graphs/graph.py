@@ -51,12 +51,22 @@ class Graph():
             self.edge = self_link + neighbor_link
             self.center = 2
         elif layout == 'infant3d':
+             """
             self.num_node = 17
             self_link = [(i, i) for i in range(self.num_node)]
             neighbor_link = [(10, 9), (9, 8), (8, 7), (7, 0), (13, 12), (12, 11), (11, 8),
                              (16, 15), (15, 14), (14, 8), (3, 2), (2,1), (1,0), (6,5), (5,4), (4,0)]
             self.edge = self_link + neighbor_link
             self.center = 0
+            """
+            self.num_node = 14
+            self_link = [(i, i) for i in range(self.num_node)]
+            # LSP 14 joints: [right_ankle, right_knee, right_hip, left_hip, left_knee, left_ankle, right_wrist, right_elbow, right_shoulder, left_shoulder, left_elbow, left_wrist, neck, head]
+            neighbor_link = [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (6, 7), (7, 8), (8, 9), (9, 10), (10, 11), (12, 13)]
+            self.edge = self_link + neighbor_link
+            self.center = 0
+
+            
         elif layout == 'infant2d':
             self.num_node = 17
             self_link = [(i, i) for i in range(self.num_node)]

@@ -55,7 +55,8 @@ class Feeder(torch.utils.data.Dataset):
         with open(self.data_path, 'rb') as f:
             file = pickle.load(f)
         fold_files = [item for item in file['annotations'] if item['frame_dir'] in file['split'][self.fold]]
-        self.data = [item['keypoint'].transpose(3,1,2,0) for item in fold_files]
+        # self.data = [item['keypoint'].transpose(3,1,2,0) for item in fold_files]
+        self.data = [item['3d_keypoint'].transpose(3,1,2,0) for item in fold_files]
         self.sample_name = [item['frame_dir'] for item in fold_files]
         try:
             self.label  = [item['label'] for item in fold_files]

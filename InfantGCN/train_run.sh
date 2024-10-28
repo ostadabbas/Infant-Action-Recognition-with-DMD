@@ -1,1 +1,1 @@
-python train.py --epochs 50 --model CTRGCN --base_lr 0.1 --repeat 1 --output_folder ../Results --exp_name CTRGCN_REC --data_path ../Data/InfAct_plus/InfAct_plus_2d_yolo_3split.pkl
+python train.py --epochs 50 --model STGCN --base_lr 0.1 --repeat 5 --output_folder ../Results --exp_name STGCN_REC --data_path ../Data/INFANTS/INFANTS_YT_TRAIN_YT_VAL_RP_TEST_3d_pose_fixed.pkl
