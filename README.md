@@ -208,7 +208,17 @@ python train.py --cfg infact --test
 ```
 
 ## Citation
-```
-```
+@article{zhu2025inafntdifussion,
+  title={Vision-Based Infant Action Recognition},
+  author={Zhu, Yanjun and Huang, Xiaofei and  Hatamimajoumerd, Elaheh and  Daneshvar Kakhaki, Pooria and  Lapedriza, Agata and
+ Ostadabbas, Sarah},
+  year={2025},
+  pubstate={Under Review}
+}
+
+## License 
+* This code is for non-commertial purpose only. 
+* For further inquiry please contact: Augmented Cognition Lab at Northeastern University: https://ostadabbas.sites.northeastern.edu/datasets/
+* Open-source datasets collected at ACLab -- License: “By downloading or using any of the datasets provided by the ACLab, you are agreeing to the “Non-commercial Purposes” condition. “Non-commercial Purposes” means research, teaching, scientific publication and personal experimentation. Non-commercial Purposes include use of the Dataset to perform benchmarking for purposes of academic or applied research publication. Non-commercial Purposes does not include purposes primarily intended for or directed towards commercial advantage or monetary compensation, or purposes intended for or directed towards litigation, licensing, or enforcement, even in part. These datasets are provided as-is, are experimental in nature, and not intended for use by, with, or for the diagnosis of human subjects for incorporation into a product.”
 
 We thank the previous work, including but not limited to [YOLOv8-Pose](https://github.com/autogyro/yolo-V8), [FiDIP](https://github.com/ostadabbas/Infant-Pose-Estimation), [HW-HuP](https://github.com/ostadabbas/HW-HuP), [CoMusion](https://github.com/jsun57/CoMusion/tree/main), [InfoGCN](https://github.com/stnoah1/infogcn), [CTR-GCN](https://github.com/Uason-Chen/CTR-GCN), [ST-GCN](https://github.com/yysijie/st-gcn).
