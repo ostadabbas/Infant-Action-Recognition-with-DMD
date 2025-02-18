@@ -39,7 +39,8 @@ if __name__ == "__main__":
     WORK_DIR = osp.join(OUT_FOLDER, EXP_NAME)
     os.makedirs(WORK_DIR, exist_ok=True)
     
-    N_FEATS = 2
+    # N_FEATS = 2   # 2 for 2D pose
+    N_FEATS = 3     # 3 for 3D pose
 
     train_dataset = Feeder(DATA_PATH, 'train', window_size=60, random_selection="uniform_choose", repeat=REPEAT, break_samples=False)
     val_dataset = Feeder(DATA_PATH, 'val', window_size=60, random_selection="uniform_choose", break_samples=False)

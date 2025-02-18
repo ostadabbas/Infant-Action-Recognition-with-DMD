@@ -19,6 +19,8 @@ __pycache__/
 Curves
 mmaction2
 ./mmaction2
+.DS_Store
+*.npz
 
 
 !figs/*.png

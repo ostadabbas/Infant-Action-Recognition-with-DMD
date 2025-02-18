@@ -1,16 +1,7 @@
-# Infant Action Recognition with DMD
+# Vision-Based Infant Action Recognition
 
 Codes and experiments for the following paper:
-Yanjun Zhu and Pooria daneshvar Kakhaki, Agata Lapedriza, Sarah Ostadabbas, “Diffusion-based Motion Denoising for Robust Infant Action Recognition” [NeurIPS 2024 UNDER REVIEW]
-
-Contact:  
-**Yanjun Zhu**  
-Email: [ya.zhu@northeastern.edu](mailto:ya.zhu@northeastern.edu)  
-**Pooria daneshvar Kakhaki**  
-Email: [daneshvarkakhaki.p@northeastern.edu](mailto:daneshvarkakhaki.p@northeastern.edu)  
-**Sarah Ostadbass**  
-Email: [s.ostadabbas@northeastern.edu](mailto:s.ostadabbas@northeastern.edu)
-
+Yanjun Zhu, Xiaofei Huang, Elaheh Hatamimajoumerd, Pooria daneshvar Kakhaki, Agata Lapedriza, Sarah Ostadabbas. “Diffusion-based Motion Denoising for Robust Infant Action Recognition”
 
 
 ### Table of Contents
@@ -19,19 +10,24 @@ Email: [s.ostadabbas@northeastern.edu](mailto:s.ostadabbas@northeastern.edu)
 3. [Data Preparation](#data-preparation)
     1. [Preprocessing Data](#preprocessing-data)
     2. [Data Download](#data-download)
-4. [Infant Action Recognition](#infant-action-recognition)
+4. [Validation of Data Processing](#validation-of-data-processing)
+    1. [External Resources](#external-resources)
+    2. [Validation Results](#validation-results)
+5. [Infant Action Recognition](#infant-action-recognition)
     1. [Training](#training)
     2. [Testing](#testing)
     3. [Visualizing](#visualizing)
-5. [Diffusion-based Motion Denoising](#diffusion-based-motion-denoising)
+6. [Diffusion-based Motion Denoising](#diffusion-based-motion-denoising)
+    1. [Training-](#training-)
+    2. [Testing-](#testing-)
 
 ## Introduction
 
-This repository contains the code for the paper "Diffusion-based Motion Denoising for Robust Infant Action Recognition". We propose a novel method for infant action recognition that combines a graph convolutional network (GCN) with a diffusion-based motion denoising (DMD) model. The GCN is used to extract the spatial and temporal features of the infant's skeleton data, while the DMD model is used to denoise the motion data.
+This repository contains the code for the paper "Vision-Based Infant Action Recognition". We propose a novel method for infant action recognition that combines a graph convolutional network (GCN) with a diffusion-based motion denoising (DMD) model. The GCN is used to extract the spatial and temporal features of the infant's skeleton data, while the DMD model is used to denoise the motion data. We introduce InfAct+, the first publicly accessible benchmark designed for real-world, vision-based infant action recognition. This dataset comprises two distinct sources: pro- cessed video segments sourced from public YouTube content and daily activity video clips recorded from recruited participants. InfAct+ encompasses a diverse range of infant actions, from fundamental motor skills to complex transitional movements, providing a comprehensive foundation for studying infant motor development.
 
-![Qualitative samples](figs\qualitative_results.png)
+![Qualitative samples](figs/pipeline.png)
 
-The code is divided into two main parts: Infant Action Recognition and Diffusion-based Motion Denoising. The former is responsible for training and testing the action recognition model, while the latter is responsible for training and testing the diffusion-based motion denoising model.
+The code is divided into main parts: Infant Action Recognition and Diffusion-based Motion Denoising. The former is responsible for training and testing the action recognition model, while the latter is responsible for training and testing the diffusion-based motion denoising model.
 
 ## Environment
 
@@ -60,7 +56,7 @@ This code base is tested with python=3.11.0 and PyTorch==2.3.0
 ## Data preparation
 
 ### Preprocessing Data
-For object detection and multi-person tracking, please refer to [Ultralytics YOLO Docs](https://docs.ultralytics.com/modes/track/ "Multi-Object Tracking with Ultralytics YOLO"). For our implementation, we used "Yolov8n-pose" and "BOT-SoRT" tracker.
+For object detection and multi-person tracking, please refer to [Ultralytics YOLO Docs](https://docs.ultralytics.com/modes/track/ "Multi-Object Tracking with Ultralytics YOLO"). For our implementation, we used "Yolov8-pose" and "BOT-SoRT" tracker.
 
 For infant-specific pose estimation, please refer to [Fine-tuned Domain-adapted Infant Pose (FiDIP)](https://github.com/ostadabbas/Infant-Pose-Estimation "Github Repository of FiDiP")
 
@@ -76,6 +72,43 @@ Put downloaded data into the following directory structure:
   - INFANTS/
     -INFANTS.pkl
 ```
+
+
+## Validation of Data Processing
+
+### External Resources
+
+In this session, we used two datasets to verify the effectiveness of our data processing pipeline:
+
+- **SyRIP Test100**  
+- **InfAct+Unseen**  
+
+Please download the data from [here](https://drive.google.com/drive/u/1/folders/1jG8kK8ZqZttuscyt1HhM1bR-pqF4EwDc). The raw data are stored in the 'custom_data' folder in **COCO format**. Additional folders contain:
+
+- **2D pose predictions:** [FiDIP](https://github.com/ostadabbas/Infant-Pose-Estimation) and [YOLOv8-Pose](https://github.com/autogyro/yolo-V8)  
+- **3D pose predictions:** [HW-HuP](https://github.com/ostadabbas/HW-HuP)  
+- **Posture results:** [Posture classifier](https://github.com/ostadabbas/Infant-Posture-Estimation)  
+
+For more details, please refer to the original paper.
+
+### Validation Results
+1. **2D Pose Estimation Comparison:** FiDIP vs. YOLOv8-Pose for infant 2D pose estimation on frames from InfAct+Unseen and SyRIP Test100 datasets.
+
+   ![Pose estimation](figs/pose_comp.png)
+
+
+
+2. **Posture Classification Accuracy Comparison (%):** Using different input data sources:  
+
+   - 2D pose from YOLOv8-Pose  
+   - 2D pose from FiDIP  
+   - 2D pose ground truth  
+   - 3D pose from HW-HuP  
+   
+   ![Posture Classification](figs/posture_comp.png)
+
+
+
 ## Infant action recognition
 
 ### Training
@@ -161,3 +194,21 @@ python visualize.py --eval_file ../Results/CTRGCN_REC/eval.pkl
 The visualized confusion matrix will be save as  ``${REC_ROOT}/Results/CTRGCN_REC/cm.png``<br/>
 
 ## Diffusion-based motion Denoising
+After obtaining 3D infant poses, we need to transform them to the same format of Human 3.6M. Please follow https://github.com/wei-mao-2019/gsps for Human3.6M dataset preparation. 
+All data needed can be downloaded from [Google Drive](https://drive.google.com/drive/folders/1sb1n9l0Na5EqtapDVShOJJ-v6o-GZrIJ?usp=sharing) and place all the dataset in ``data`` folder inside the root of this repo. 
+
+### Training-
+```
+python train.py --cfg infact
+```
+
+### Testing-
+```
+python train.py --cfg infact --test
+```
+
+## Citation
+```
+```
+
+We thank the previous work, including but not limited to [YOLOv8-Pose](https://github.com/autogyro/yolo-V8), [FiDIP](https://github.com/ostadabbas/Infant-Pose-Estimation), [HW-HuP](https://github.com/ostadabbas/HW-HuP), [CoMusion](https://github.com/jsun57/CoMusion/tree/main), [InfoGCN](https://github.com/stnoah1/infogcn), [CTR-GCN](https://github.com/Uason-Chen/CTR-GCN), [ST-GCN](https://github.com/yysijie/st-gcn).
