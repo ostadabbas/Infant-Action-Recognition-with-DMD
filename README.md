@@ -81,10 +81,12 @@ Put downloaded data into the following directory structure:
 ## Validation of Data Processing
 
 In this session, we used two datasets to verify the effectiveness of our data processing pipeline:
+
 - **SyRIP Test100**  
 - **InfAct+Unseen**  
 
 Please download the data from [GoogleDrive](https://drive.google.com/drive/u/1/folders/1jG8kK8ZqZttuscyt1HhM1bR-pqF4EwDc). The raw data are stored in the 'custom_data' folder in **COCO format**. Additional folders contain:
+
 - **2D pose predictions:** [FiDIP](https://github.com/ostadabbas/Infant-Pose-Estimation) and [YOLOv8-Pose](https://github.com/autogyro/yolo-V8)  
 - **3D pose predictions:** [HW-HuP](https://github.com/ostadabbas/HW-HuP)  
 - **Posture results:** [Posture classifier](https://github.com/ostadabbas/Infant-Posture-Estimation)  
@@ -93,15 +95,18 @@ For more details, please refer to the original paper.
 
 ### Evaluation Results
 1. **2D Pose Estimation Comparison:** FiDIP vs. YOLOv8-Pose for infant 2D pose estimation on frames from InfAct+Unseen and SyRIP Test100 datasets.
+
    ![Pose estimation](figs\pose_comp.png)
 
 
 
 2. **Posture Classification Accuracy Comparison (%):** Using different input data sources:  
+
    - 2D pose from YOLOv8-Pose  
    - 2D pose from FiDIP  
    - 2D pose ground truth  
    - 3D pose from HW-HuP  
+   
    ![Posture Classification](figs\posture_comp.png)
 
 
