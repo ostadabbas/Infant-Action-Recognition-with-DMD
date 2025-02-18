@@ -208,6 +208,7 @@ python train.py --cfg infact --test
 ```
 
 ## Citation
+```
 @article{zhu2025inafntdifussion,
   title={Vision-Based Infant Action Recognition},
   author={Zhu, Yanjun and Huang, Xiaofei and  Hatamimajoumerd, Elaheh and  Daneshvar Kakhaki, Pooria and  Lapedriza, Agata and
@@ -215,6 +216,7 @@ python train.py --cfg infact --test
   year={2025},
   pubstate={Under Review}
 }
+```
 
 ## License 
 * This code is for non-commertial purpose only. 
