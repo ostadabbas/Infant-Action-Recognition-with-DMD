@@ -1,7 +1,7 @@
 # Vision-Based Infant Action Recognition
 
 Codes and experiments for the following paper:
-Yanjun Zhu, Xiaofei Huang, Elaheh Hatamimajoumerd, Pooria daneshvar Kakhaki, Agata Lapedriza, Sarah Ostadabbas. “Diffusion-based Motion Denoising for Robust Infant Action Recognition”
+Yanjun Zhu, Xiaofei Huang, Elaheh Hatamimajoumerd, Pooria daneshvar Kakhaki, Agata Lapedriza, Sarah Ostadabbas. “Vision-Based Infant Action Recognition”
 
 
 ### Table of Contents
