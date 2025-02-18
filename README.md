@@ -93,13 +93,7 @@ For more details, please refer to the original paper.
 
 ### Evaluation Results
 1. **2D Pose Estimation Comparison:** FiDIP vs. YOLOv8-Pose for infant 2D pose estimation on frames from InfAct+Unseen and SyRIP Test100 datasets.
-
-| Dataset         | Model         | Backbone        | Input Size  | AP   | AP50 | AP75 | AR   | AR50 | AR75 |
-|------------------|--------------|-----------------|------------|-----|-----|-----|-----|-----|-----|
-| **SyRIP Test100** | YOLOv8-Pose  | CSP-darknet53  | 640        | 78.4 | 96.5 | 88.7 | 82.5 | 98.0 | 92.0 |
-|                  | FiDIP        | HRNet-W48      | 384×288   | **92.1** | **97.1** | **97.1** | **93.6** | **98.0** | **98.0** |
-| **InfAct+Unseen**| YOLOv8-Pose  | CSP-darknet53  | 640        | 61.2 | 97.9 | 57.8 | 70.6 | 98.7 | 72.2 |
-|                  | FiDIP        | HRNet-W48      | 384×288   | **62.9** | **98.9** | **63.5** | **73.2** | **99.8** | **76.8** |
+   ![Pose estimation](figs\pose_comp.png)
 
 
 
@@ -108,16 +102,7 @@ For more details, please refer to the original paper.
    - 2D pose from FiDIP  
    - 2D pose ground truth  
    - 3D pose from HW-HuP  
-|| Dataset | Input Type                       | Supine | Prone | Sitting | Standing | All-fours | Overall |
-|---------|----------------------------------|--------|-------|---------|----------|-----------|---------|
-| **SyRIP Test100** | 2D Pose Based on YOLOv8-Pose   | 53.5   | 76.9  | 81.8    | *100.0*  | 53.3     | 65.0    |
-|                  | 2D Pose Based on FiDIP         | 67.4   | 76.9  | *90.9*  | *100.0*  | *73.3*   | 75.0    |
-|                  | 2D Pose Ground Truth            | 69.8   | 84.6  | *90.9*  | *100.0*  | *73.3*   | 78.0    |
-|                  | 3D Pose Based on HW-HuP        | *76.7* | *92.3*| 90.0    | 80.0      | 53.3     | *79.0*  |
-| **InfAct+Unseen**| 2D Pose Based on YOLOv8-Pose   | 80.0   | 18.2  | 54.6    | 84.8      | *100.0*  | 65.4    |
-|                  | 2D Pose Based on FiDIP         | 91.4   | *100.0*| 55.3    | *88.0*    | 97.8     | 71.1    |
-|                  | 2D Pose Ground Truth            | *100.0*| 90.9  | 30.9    | 71.7      | *100.0*  | 54.3    |
-|                  | 3D Pose Based on HW-HuP        | 97.1   | *100.0*| *92.4*  | 75.0      | *100.0*  | *90.4*  |
+   ![Posture Classification](figs\posture_comp.png)
 
 
 
